@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Weather</title>
+        <style>
+
+            body{
+                margin-top: 100px;
+                text-align: center;
+                font-family: 'Arvo', serif;
+                background-color: aliceblue;
+            }
+
+            fieldset {
+            
+            margin-left: 400px;
+            margin-right: 400px;
+            border-radius: 10px;
+            
+          }
+
+            .idPrevisãoTempo{
+              font-size: 40px;
+            }
+
+            label{
+              margin: 10px;
+              font-size: 20px;
+            }
+
+            select{
+              margin-top: 15px;
+              font-size: 15px;
+            }
+
+            button {
+
+              border: 1px none;
+              line-height: 1;
+              margin-top: 10px;
+              padding: 1em 2em;
+              border-radius: 8px;
+              background-color: rosybrown;
+              transition: 0.25s;
+              border-color: aliceblue;
+              cursor: pointer;
+              }
+
+              button:hover {
+              background-color: rgb(202, 175, 175) ;
+              }
+
+        </style>
+</head>
+
+  <body>
+          <fieldset>
+          <div class="idPrevisãoTempo">Previsão do Tempo</div>
+
+                  <label class="clCidade" for="idcodigoCidade">Selecione uma Cidade</label>
+                      <div> 
+                          <select name="nmCidades" id="idCidades">
+                          <option value="455846">Blumenau</option>
+                          <option value="455854">Chapecó</option>
+                          <option value="455856">Criciuma</option>
+                          <option value="90200648">Florianópolis</option>
+                          <option value="459547">Gaspar</option>
+                          <option value="455870">Itajaí</option>
+                          <option value="456283">Jaraguá do Sul</option>
+                          <option value="455873">Joinville</option>
+                          <option value="457944">Rio do Sul</option>
+                          <option value="458185">Timbó</option>
+                          </select>
+                  
+                        <button type="button" id="idbtBuscar">Buscar</button>
+                      </div>
+            
+                          <div id="idOuts">
+                            <div>
+                              <output id="idOutResultado"></output>
+                            </div>
+                            <div>
+                              <output id="idOutCity"></output>
+                            </div>
+                            <div>
+                              <output id="idOutTemperatura"></output>
+                            </div>
+                            <div>
+                              <output id="idOutTempo"></output>
+                            </div>         
+                            <div>
+                              <output id="idOutHumidade"></output>
+                            </div>
+                            <div>
+                              <output id="idOutDate"></output>
+                            </div>
+                            <div>
+                              <output id="idOutTime"></output>
+                            </div>
+             </div>
+            </fieldset>    
+
+              <script>
+                //Declaração das variaveis globais
+                var codigoCidade
+                var btBuscar = document.getElementById("idbtBuscar")
+                var outResultado = document.getElementById("idOutResultado")
+                var outDate = document.getElementById("idOutDate")
+                var outTime = document.getElementById("idOutTime")
+                var outCity = document.getElementById("idOutCity")
+                var outTemperatura = document.getElementById("idOutTemperatura")
+                var outTempo = document.getElementById("idOutTempo")
+                var outHumidade = document.getElementById("idOutHumidade")
+
+                btBuscar.onclick = function(){
+                    buscarClima()
+                    
+                    }
+                    
+                    function buscarClima(){
+                                            
+                        let codigoCidade = document.getElementById("idCidades").value
+                        clima(codigoCidade)
+                        
+                    }
+
+                  
+                    function clima(codigoCidade) {
+
+                    var xhr = new XMLHttpRequest(); 
+                    xhr.open("GET", "https://api.hgbrasil.com/weather?format=json-cors&woeid="+codigoCidade+"")
+
+                    xhr.addEventListener("load", function(){
+                        var resposta = xhr.responseText;
+                        imprimirDados(resposta)
+                      
+                    })
+                    
+                    xhr.send()
+
+                    }
+
+                    function imprimirDados(cidadeJson){
+                    console.log(cidadeJson);
+
+                    let cidadeObj = JSON.parse(cidadeJson)
+
+                    outResultado.value = "Resultado:"
+                    outDate.value = "Data da consulta:" + cidadeObj.results.date
+                    outTime.value = "Hora da consulta:" + cidadeObj.results.time
+                    outCity.value = cidadeObj.results.city
+                    outTemperatura.value =  cidadeObj.results.temp + "°C"
+                    outTempo.value = "Condição do Tempo: " + cidadeObj.results.description
+                    outHumidade.value = "Humidade Relativa: " + cidadeObj.results.humidity
+
+                }
+
+            </script>
+ 
+</body>
+
+</html>
